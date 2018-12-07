@@ -20,6 +20,7 @@ public class CreateGoogleFile {
 
         File fileMetadata = new File();
         fileMetadata.setName(customFileName);
+        fileMetadata.setMimeType("application/vnd.google-apps.document");
 
         List<String> parents = Arrays.asList(googleFolderIdParent);
         fileMetadata.setParents(parents);

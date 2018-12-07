@@ -2,16 +2,16 @@ package com.example.demo.Dto;
 
 public class FolderDto {
 
-    private  String folderIdParent;
+    private  String folderId;
 
     private String folderName;
 
-    public String getFolderIdParent() {
-        return folderIdParent;
+    public String getFolderId() {
+        return folderId;
     }
 
-    public void setFolderIdParent(String folderIdParent) {
-        this.folderIdParent = folderIdParent;
+    public void setFolderId(String folderId) {
+        this.folderId = folderId;
     }
 
     public String getFolderName() {

@@ -24,7 +24,7 @@ public class FindFilesByName {
         do {
             FileList result = driveService.files().list().setQ(query).setSpaces("drive") //
                     // Fields will be assigned values: id, name, createdTime, mimeType
-                    .setFields("nextPageToken, files(id, name, createdTime, mimeType)")//
+                    .setFields("nextPageToken, files(id, name, createdTime, mimeType, webContentLink, webViewLink, parents)")//
                     .setPageToken(pageToken).execute();
             for (File file : result.getFiles()) {
                 list.add(file);

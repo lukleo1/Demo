@@ -8,6 +8,26 @@ public class FileDto {
 
     private  String customFileName;
 
+    private  String webContentLink;
+
+    private  String webViewLink;
+
+    public String getWebContentLink() {
+        return webContentLink;
+    }
+
+    public void setWebContentLink(String webContentLink) {
+        this.webContentLink = webContentLink;
+    }
+
+    public String getWebViewLink() {
+        return webViewLink;
+    }
+
+    public void setWebViewLink(String webViewLink) {
+        this.webViewLink = webViewLink;
+    }
+
     public String getFolderIdParent() {
         return folderIdParent;
     }
