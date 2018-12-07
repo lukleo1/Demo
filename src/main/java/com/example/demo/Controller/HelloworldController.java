@@ -16,6 +16,7 @@
 
 package com.example.demo.Controller;
 
+import com.example.demo.Dto.ListFiles;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
@@ -35,6 +36,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.*;
 import java.security.GeneralSecurityException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -77,19 +79,19 @@ public class HelloworldController {
     return new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");
   }
   @GetMapping(value = "/")
-  public String createCredencial() throws IOException, GeneralSecurityException {
+  public List<ListFiles> createCredencial() throws IOException, GeneralSecurityException {
 
     java.io.File credentials_folder= ResourceUtils.getFile("classpath:credentials");
 
     System.out.println("CREDENTIALS_FOLDER: " + credentials_folder.getAbsolutePath());
-
+    List<ListFiles> listFiles= new ArrayList<>();
     // 1: Create CREDENTIALS_FOLDER
     if (!credentials_folder.exists()) {
       credentials_folder.mkdirs();
 
       System.out.println("Created Folder: " + credentials_folder.getAbsolutePath());
       System.out.println("Copy file " + CLIENT_SECRET_FILE_NAME + " into folder above.. and rerun this class!!");
-      return "Carpeta Creada";
+
     }
 
     // 2: Build a new authorized API client service.
@@ -110,9 +112,14 @@ public class HelloworldController {
     } else {
       System.out.println("Files:");
       for (com.google.api.services.drive.model.File file : files) {
-        System.out.printf("%s (%s)\n", file.getName(), file.getId());
+        ListFiles info= new ListFiles();
+        info.setName(file.getName());
+        info.setIdFile(file.getId());
+        listFiles.add(info);
+
       }
     }
-    return "Hola Mundo Entelgy Google Cloud";
+
+    return listFiles;
   }
 }
