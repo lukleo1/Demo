@@ -59,6 +59,10 @@ public class ApiReqController {
 
   private static final List<String> SCOPES = Collections.singletonList(DriveScopes.DRIVE);
 
+  // Directory to store user credentials for this application.
+  private static final java.io.File CREDENTIALS_FOLDER //
+          = new java.io.File(System.getProperty("user.home"), "credentials");
+
   private static Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT) throws IOException {
 
     java.io.File clientSecretFilePath= ResourceUtils.getFile("classpath:credentials/"+CLIENT_SECRET_FILE_NAME);
@@ -83,20 +87,56 @@ public class ApiReqController {
     return new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");
   }
 
+//  @GetMapping(value = "/")
+//  public List<FolderDto> createCredential() throws IOException, GeneralSecurityException {
+//
+//    java.io.File credentials_folder= ResourceUtils.getFile("classpath:credentials");
+//
+//    System.out.println("CREDENTIALS_FOLDER: " + credentials_folder.getAbsolutePath());
+//    List<FolderDto> listFiles= new ArrayList<>();
+//    // 1: Create CREDENTIALS_FOLDER
+//    if (!credentials_folder.exists()) {
+//      credentials_folder.mkdirs();
+//
+//      System.out.println("Created Folder: " + credentials_folder.getAbsolutePath());
+//      System.out.println("Copy file " + CLIENT_SECRET_FILE_NAME + " into folder above.. and rerun this class!!");
+//
+//    }
+//
+//    // 2: Build a new authorized API client service.
+//    final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+//
+//    // 3: Read client_secret.json file & create Credential object.
+//    Credential credential = getCredentials(HTTP_TRANSPORT);
+//
+//    // 5: Create Google Drive Service.
+//    Drive service = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential) //
+//            .setApplicationName(APPLICATION_NAME).build();
+//
+//    // Print the names and IDs for up to 10 files.
+//    FileList result = service.files().list().setPageSize(10).setFields("nextPageToken, files(id, name)").execute();
+//    List<com.google.api.services.drive.model.File> files = result.getFiles();
+//    if (files == null || files.isEmpty()) {
+//      System.out.println("No files found.");
+//    } else {
+//      System.out.println("Files:");
+//      return getInfo(files);
+//    }
+//
+//    return listFiles;
+//  }
+
   @GetMapping(value = "/")
-  public List<FolderDto> createCredential() throws IOException, GeneralSecurityException {
+  public String hello() throws IOException, GeneralSecurityException {
+    System.out.println("CREDENTIALS_FOLDER: " + CREDENTIALS_FOLDER.getAbsolutePath());
 
-    java.io.File credentials_folder= ResourceUtils.getFile("classpath:credentials");
-
-    System.out.println("CREDENTIALS_FOLDER: " + credentials_folder.getAbsolutePath());
-    List<FolderDto> listFiles= new ArrayList<>();
     // 1: Create CREDENTIALS_FOLDER
-    if (!credentials_folder.exists()) {
-      credentials_folder.mkdirs();
+    if (!CREDENTIALS_FOLDER.exists()) {
+      CREDENTIALS_FOLDER.mkdirs();
 
-      System.out.println("Created Folder: " + credentials_folder.getAbsolutePath());
+      System.out.println("Created Folder: " + CREDENTIALS_FOLDER.getAbsolutePath());
       System.out.println("Copy file " + CLIENT_SECRET_FILE_NAME + " into folder above.. and rerun this class!!");
-
+      return "Carpeta Creada";
     }
 
     // 2: Build a new authorized API client service.
@@ -111,15 +151,16 @@ public class ApiReqController {
 
     // Print the names and IDs for up to 10 files.
     FileList result = service.files().list().setPageSize(10).setFields("nextPageToken, files(id, name)").execute();
-    List<com.google.api.services.drive.model.File> files = result.getFiles();
+    List<File> files = result.getFiles();
     if (files == null || files.isEmpty()) {
       System.out.println("No files found.");
     } else {
       System.out.println("Files:");
-      return getInfo(files);
+      for (File file : files) {
+        System.out.printf("%s (%s)\n", file.getName(), file.getId());
+      }
     }
-
-    return listFiles;
+    return "Hola Mundo Entelgy Google Cloud";
   }
 
   @GetMapping(value = "/folder/list")
