@@ -40,6 +40,8 @@ import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static com.example.demo.Util.CreateFolder.createGoogleFolder;
 import static com.example.demo.Util.CreateGoogleFile.createGoogleFile;
@@ -50,6 +52,9 @@ import static com.example.demo.Util.ShareGoogleFile.createPermissionForEmail;
 
 @RestController
 public class ApiReqController {
+
+  private static final Logger logger = Logger.getLogger(ApiReqController.class.getName());
+
 
   private static final String APPLICATION_NAME = "Google Drive API Java Quickstart";
 
@@ -128,6 +133,8 @@ public class ApiReqController {
 
   @GetMapping(value = "/")
   public String hello() throws IOException, GeneralSecurityException {
+
+    logger.log(Level.INFO, "CREDENTIALS_FOLDER 0");
     System.out.println("CREDENTIALS_FOLDER: " + CREDENTIALS_FOLDER.getAbsolutePath());
 
     // 1: Create CREDENTIALS_FOLDER
