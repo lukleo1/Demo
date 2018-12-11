@@ -92,58 +92,20 @@ public class ApiReqController {
     return new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");
   }
 
-//  @GetMapping(value = "/")
-//  public List<FolderDto> createCredential() throws IOException, GeneralSecurityException {
-//
-//    java.io.File credentials_folder= ResourceUtils.getFile("classpath:credentials");
-//
-//    System.out.println("CREDENTIALS_FOLDER: " + credentials_folder.getAbsolutePath());
-//    List<FolderDto> listFiles= new ArrayList<>();
-//    // 1: Create CREDENTIALS_FOLDER
-//    if (!credentials_folder.exists()) {
-//      credentials_folder.mkdirs();
-//
-//      System.out.println("Created Folder: " + credentials_folder.getAbsolutePath());
-//      System.out.println("Copy file " + CLIENT_SECRET_FILE_NAME + " into folder above.. and rerun this class!!");
-//
-//    }
-//
-//    // 2: Build a new authorized API client service.
-//    final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-//
-//    // 3: Read client_secret.json file & create Credential object.
-//    Credential credential = getCredentials(HTTP_TRANSPORT);
-//
-//    // 5: Create Google Drive Service.
-//    Drive service = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential) //
-//            .setApplicationName(APPLICATION_NAME).build();
-//
-//    // Print the names and IDs for up to 10 files.
-//    FileList result = service.files().list().setPageSize(10).setFields("nextPageToken, files(id, name)").execute();
-//    List<com.google.api.services.drive.model.File> files = result.getFiles();
-//    if (files == null || files.isEmpty()) {
-//      System.out.println("No files found.");
-//    } else {
-//      System.out.println("Files:");
-//      return getInfo(files);
-//    }
-//
-//    return listFiles;
-//  }
-
   @GetMapping(value = "/")
-  public String hello() throws IOException, GeneralSecurityException {
+  public List<FolderDto> createCredential() throws IOException, GeneralSecurityException {
+    logger.log(Level.INFO, "Retrieved list of all books");
+    java.io.File credentials_folder= ResourceUtils.getFile("classpath:credentials");
 
-    logger.log(Level.INFO, "CREDENTIALS_FOLDER 0");
-    System.out.println("CREDENTIALS_FOLDER: " + CREDENTIALS_FOLDER.getAbsolutePath());
-
+    System.out.println("CREDENTIALS_FOLDER: " + credentials_folder.getAbsolutePath());
+    List<FolderDto> listFiles= new ArrayList<>();
     // 1: Create CREDENTIALS_FOLDER
-    if (!CREDENTIALS_FOLDER.exists()) {
-      CREDENTIALS_FOLDER.mkdirs();
+    if (!credentials_folder.exists()) {
+      credentials_folder.mkdirs();
 
-      System.out.println("Created Folder: " + CREDENTIALS_FOLDER.getAbsolutePath());
+      System.out.println("Created Folder: " + credentials_folder.getAbsolutePath());
       System.out.println("Copy file " + CLIENT_SECRET_FILE_NAME + " into folder above.. and rerun this class!!");
-      return "Created Folder: " + CREDENTIALS_FOLDER.getAbsolutePath();
+
     }
 
     // 2: Build a new authorized API client service.
@@ -158,16 +120,15 @@ public class ApiReqController {
 
     // Print the names and IDs for up to 10 files.
     FileList result = service.files().list().setPageSize(10).setFields("nextPageToken, files(id, name)").execute();
-    List<File> files = result.getFiles();
+    List<com.google.api.services.drive.model.File> files = result.getFiles();
     if (files == null || files.isEmpty()) {
       System.out.println("No files found.");
     } else {
       System.out.println("Files:");
-      for (File file : files) {
-        System.out.printf("%s (%s)\n", file.getName(), file.getId());
-      }
+      return getInfo(files);
     }
-    return "Created Folder: " + CREDENTIALS_FOLDER.getAbsolutePath();
+
+    return listFiles;
   }
 
   @GetMapping(value = "/folder/list")
