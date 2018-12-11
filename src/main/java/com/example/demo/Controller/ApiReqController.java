@@ -64,8 +64,12 @@ public class ApiReqController {
 
   private static final List<String> SCOPES = Collections.singletonList(DriveScopes.DRIVE);
 
+  private static final String CREDENTIALS_FILE_PATH = "/client_secret.json";
+
+  private static final String TOKENS_DIRECTORY_PATH = "credentials";
+
   /** File for storing user credentials. */
-  private static final java.io.File DATA_STORE_FILE =  new java.io.File(System.getProperty("user.home"), ".credentials/doubleclicksearch.json");
+
 
   // Directory to store user credentials for this application.
   private static final java.io.File CREDENTIALS_FOLDER //
@@ -84,13 +88,13 @@ public class ApiReqController {
     }
     System.out.println("CREDENTIALS_FOLDER: Paso 2 " );
     // Load client secrets.
-    InputStream in = new FileInputStream(clientSecretFilePath);
+    InputStream in = ApiReqController.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
     System.out.println("CREDENTIALS_FOLDER: Paso 3" );
     GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
     System.out.println("CREDENTIALS_FOLDER: Paso 4 " );
     // Build flow and trigger user authorization request.
     GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(HTTP_TRANSPORT, JSON_FACTORY,
-            clientSecrets, SCOPES).setDataStoreFactory(new FileDataStoreFactory(credentials_folder))
+            clientSecrets, SCOPES).setDataStoreFactory(new FileDataStoreFactory(new java.io.File(TOKENS_DIRECTORY_PATH)))
             .setAccessType("offline").build();
     System.out.println("CREDENTIALS_FOLDER: Paso 5 " );
     return new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");
@@ -98,8 +102,10 @@ public class ApiReqController {
 
   @GetMapping(value = "/")
   public List<FolderDto> createCredential() throws IOException, GeneralSecurityException {
-    logger.log(Level.INFO, "Retrieved list of all books");
+
     java.io.File credentials_folder= ResourceUtils.getFile("classpath:credentials");
+
+
 
     System.out.println("CREDENTIALS_FOLDER: " + credentials_folder.getAbsolutePath());
     List<FolderDto> listFiles= new ArrayList<>();
