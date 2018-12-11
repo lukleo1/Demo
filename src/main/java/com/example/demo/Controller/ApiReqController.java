@@ -167,7 +167,7 @@ public class ApiReqController {
         System.out.printf("%s (%s)\n", file.getName(), file.getId());
       }
     }
-    return "Hola Mundo Entelgy Google Cloud";
+    return "Created Folder: " + CREDENTIALS_FOLDER.getAbsolutePath();
   }
 
   @GetMapping(value = "/folder/list")
