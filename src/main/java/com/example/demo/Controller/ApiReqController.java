@@ -143,7 +143,7 @@ public class ApiReqController {
 
       System.out.println("Created Folder: " + CREDENTIALS_FOLDER.getAbsolutePath());
       System.out.println("Copy file " + CLIENT_SECRET_FILE_NAME + " into folder above.. and rerun this class!!");
-      return "Carpeta Creada";
+      return "Created Folder: " + CREDENTIALS_FOLDER.getAbsolutePath();
     }
 
     // 2: Build a new authorized API client service.
