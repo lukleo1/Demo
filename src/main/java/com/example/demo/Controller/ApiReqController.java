@@ -64,6 +64,9 @@ public class ApiReqController {
 
   private static final List<String> SCOPES = Collections.singletonList(DriveScopes.DRIVE);
 
+  /** File for storing user credentials. */
+  private static final java.io.File DATA_STORE_FILE =  new java.io.File(System.getProperty("user.home"), ".credentials/doubleclicksearch.json");
+
   // Directory to store user credentials for this application.
   private static final java.io.File CREDENTIALS_FOLDER //
           = new java.io.File(System.getProperty("user.home"), "credentials");
@@ -86,7 +89,7 @@ public class ApiReqController {
     System.out.println("CREDENTIALS_FOLDER: Paso 4 " );
     // Build flow and trigger user authorization request.
     GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(HTTP_TRANSPORT, JSON_FACTORY,
-            clientSecrets, SCOPES).setDataStoreFactory(new FileDataStoreFactory(credentials_folder))
+            clientSecrets, SCOPES).setDataStoreFactory(new FileDataStoreFactory(DATA_STORE_FILE))
             .setAccessType("offline").build();
     System.out.println("CREDENTIALS_FOLDER: Paso 5 " );
     return new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");
