@@ -69,7 +69,7 @@ public class ApiReqController {
           = new java.io.File(System.getProperty("user.home"), "credentials");
 
   private static Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT) throws IOException {
-
+    System.out.println("CREDENTIALS_FOLDER: Paso 1 " );
     java.io.File clientSecretFilePath= ResourceUtils.getFile("classpath:credentials/"+CLIENT_SECRET_FILE_NAME);
 
     java.io.File credentials_folder= ResourceUtils.getFile("classpath:credentials");
@@ -78,17 +78,17 @@ public class ApiReqController {
       throw new FileNotFoundException("Please copy " + CLIENT_SECRET_FILE_NAME //
               + " to folder: " + credentials_folder.getAbsolutePath());
     }
-
+    System.out.println("CREDENTIALS_FOLDER: Paso 2 " );
     // Load client secrets.
     InputStream in = new FileInputStream(clientSecretFilePath);
-
+    System.out.println("CREDENTIALS_FOLDER: Paso 3" );
     GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
-
+    System.out.println("CREDENTIALS_FOLDER: Paso 4 " );
     // Build flow and trigger user authorization request.
     GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(HTTP_TRANSPORT, JSON_FACTORY,
             clientSecrets, SCOPES).setDataStoreFactory(new FileDataStoreFactory(credentials_folder))
             .setAccessType("offline").build();
-
+    System.out.println("CREDENTIALS_FOLDER: Paso 5 " );
     return new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");
   }
 
